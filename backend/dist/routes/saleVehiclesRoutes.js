@@ -1,0 +1,17 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const saleVehiclesController_1 = require("../controllers/saleVehiclesController");
+const validate_1 = require("../middleware/validate");
+const authMiddleware_1 = require("../middleware/authMiddleware");
+const router = (0, express_1.Router)();
+router.get('/', saleVehiclesController_1.SaleVehiclesController.getAllPublic);
+router.get('/:identifier', saleVehiclesController_1.SaleVehiclesController.getBySlugOrId);
+router.post('/enquire', (0, validate_1.validateRequest)(saleVehiclesController_1.purchaseEnquirySchema), saleVehiclesController_1.SaleVehiclesController.submitPurchaseEnquiry);
+router.get('/admin/all', authMiddleware_1.requireAuth, saleVehiclesController_1.SaleVehiclesController.getAllAdmin);
+router.post('/admin', authMiddleware_1.requireAuth, (0, validate_1.validateRequest)(saleVehiclesController_1.createSaleVehicleSchema), saleVehiclesController_1.SaleVehiclesController.create);
+router.patch('/admin/:id', authMiddleware_1.requireAuth, saleVehiclesController_1.SaleVehiclesController.update);
+router.delete('/admin/:id', authMiddleware_1.requireAuth, saleVehiclesController_1.SaleVehiclesController.delete);
+router.get('/admin/enquiries/all', authMiddleware_1.requireAuth, saleVehiclesController_1.SaleVehiclesController.getEnquiries);
+router.patch('/admin/enquiries/:id/status', authMiddleware_1.requireAuth, saleVehiclesController_1.SaleVehiclesController.updateEnquiryStatus);
+exports.default = router;

@@ -1,0 +1,11 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const notificationsController_1 = require("../controllers/notificationsController");
+const validate_1 = require("../middleware/validate");
+const authMiddleware_1 = require("../middleware/authMiddleware");
+const router = (0, express_1.Router)();
+router.get('/vapid-public-key', notificationsController_1.NotificationsController.getPublicKey);
+router.post('/subscribe', (0, validate_1.validateRequest)(notificationsController_1.subscribeSchema), notificationsController_1.NotificationsController.subscribe);
+router.post('/test-broadcast', authMiddleware_1.requireAuth, notificationsController_1.NotificationsController.testBroadcast);
+exports.default = router;
